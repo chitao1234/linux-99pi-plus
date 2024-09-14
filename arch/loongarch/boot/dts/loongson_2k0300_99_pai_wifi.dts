@@ -1,0 +1,236 @@
+/dts-v1/;
+#include "loongson_2k0300.dtsi"
+
+/ {
+	model = "loongson,generic";
+	compatible = "loongson,loongson3";
+	#address-cells = <2>;
+	#size-cells = <2>;
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+		bootargs = "earlycon";
+	};
+
+	memory {
+		name = "memory";
+		device_type = "memory";
+		reg =  <0 0x00200000 0 0x0ee00000
+#if 1
+			0 0x90000000 0 0x10000000>;
+#else
+			0 0x90000000 0 0x30000000>;
+#endif
+	};
+
+	soc {
+
+		sound {
+			status = "okay";
+			compatible = "loongson,ls-sound";
+			loongson,i2s-controller = <&i2s>;
+			loongson,audio-codec = <&audio>;
+			codec-names = "ES8323 PAIF RX","Playback", "ES8323 HiFi", "ES8323.0-0010",
+			"ES8323 PAIF TX","Capture","ES8323 HiFi","ES8323.0-0010";
+		};
+
+		reserved-memory {
+			#address-cells = <2>;
+			#size-cells = <2>;
+			ranges;
+
+			display_reserved: framebuffer@30000000 {
+				compatible = "shared-dma-pool";
+				reg = <0x0 0xa0000000 0x0 0x08000000>; /* 128M */
+				linux,cma-default;
+			};
+		};
+	};
+};
+
+&cpu_uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_2bit_m0>;
+};
+
+&cpu_uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_2bit_m0>;
+};
+
+&cpu_uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_2bit_m0>;
+};
+
+&rtc0 {
+	status = "okay";
+};
+
+&can2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&can2_mux_m0>;
+};
+
+&can3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&can3_mux_m0>;
+};
+
+&gmac0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&gmac0_12bit_f0>, <&gmac0_12bit_f1>;
+};
+
+
+&emmc0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdio0_pin_f0>, <&sdio0_pin_f1>;
+};
+
+&ehci {
+	status = "okay";
+};
+
+&ohci {
+	status = "okay";
+};
+
+&otg {
+	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <100000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_mux_m0>;
+
+	codec:@10 {
+		compatible = "everest,es8323";
+		reg = <0x10>;
+	};
+
+	gt9xx-i2c@14{
+		status = "okay";
+		compatible = "goodix,gt9xx";
+		reg = <0x14>;
+
+		reset-gpios = <&gpa3 5 0>;
+		irq-gpios = <&gpa3 4 IRQ_TYPE_EDGE_RISING>;
+		irq-flags = <2>;
+		goodix,type-a-report = <0>;
+		goodix,driver-send-cfg = <0>;
+		goodix,create-wr-node = <1>;
+		goodix,wakeup-with-reset = <0>;
+		goodix,resume-in-workqueue = <0>;
+		goodix,int-sync = <1>;
+		goodix,swap-x2y = <0>;
+		goodix,esd-protect = <0>;
+		goodix,auto-update = <1>;
+		goodix,auto-update-cfg = <0>;
+		goodix,power-off-sleep = <0>;
+		goodix.pen-suppress-finger = <0>;
+		goodix,cfg-group0 = [
+			53 D0 02 00 05 05 F5 D5 21 48 2D 0F 5A 41 0E 05 00 00 32
+			32 20 00 05 14 14 1A 14 8B 2B 00
+		];
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_mux_m0>;
+};
+
+&i2c2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_mux_m0>;
+};
+
+&i2s {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2s_pin_f0>, <&i2s_pin_f1>;
+};
+
+&audio {
+	status = "okay";
+};
+
+&spi0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_6bit_f0>,<&spi0_6bit_f1>;
+
+	norflash@0 {
+		reg = <0>;
+		spi-rx-bus-width = <4>;
+		spi-max-frequency = <25000000>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			boot@0 {
+				label = "boot";
+				reg = <0x0000000 0x100000>;
+				/*read-only;*/
+			};
+
+			kernel@100000 {
+				label = "kernel";
+				reg = <0x100000 0x600000>;
+			};
+
+			rootfs@700000 {
+				label = "rootfs";
+				reg = <0x700000 0x1000000>;
+			};
+		};
+	};
+};
+
+&spi1 {
+	status = "okay";
+};
+
+&spi2 {
+	status = "okay";
+	pinctrl-0 = <&spi2_pin>;
+	spidev@0{
+		compatible = "rohm,dh2228fv";
+		spi-max-frequency = <50000000>;
+		reg = <0>;
+	};
+};
+
+&pwm2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm2_mux_m1>;
+};
+
+&pwm3{
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm3_mux_m1>;
+};
+
+&dc{
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&lcd_pin_f0>,<&lcd_pin_f1>;
+};
