@@ -100,6 +100,10 @@
 			loongson,pinmux = <&gpa6 6 6>;
 			loongson,pinmux-funcsel = <PINCTL_FUNCTION2>;
 		};
+		pwm0_mux_m2: pwm0-mux-m2{
+			loongson,pinmux = <&gpa5 6 6>;
+			loongson,pinmux-funcsel = <PINCTL_FUNCTION2>;
+		};
 	};
 	pwm1_pin: pwm1-pin{
 		pwm1_mux_m0: pwm1-mux-m0{
