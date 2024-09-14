@@ -1,0 +1,28 @@
+/dts-v1/;
+
+/{
+	description = "Loongson 2k0300 99pi boot image";
+	#address-cells = <2>;
+
+	images {
+		kernel-1 {
+			description = "vmlinux.bin.lzma";
+			data = /incbin/("vmlinux.bin.lzma");
+			type = "kernel";
+			arch = "loongarch";
+			os = "linux";
+			compression = "lzma";
+			load = <0x90000000 0x00200000>;
+			entry = <0x90000000 0x@ENTRY@>;
+		};
+	};
+
+	configurations {
+		default = "config-1";
+		config-1 {
+			description = "2k0300 99pi FIT image";
+			kernel = "kernel-1";
+			loadables = "kernel-1";
+		};
+	};
+};

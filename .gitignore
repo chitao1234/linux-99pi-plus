@@ -171,3 +171,9 @@ sphinx_*/
 
 # Rust analyzer configuration
 /rust-project.json
+
+# build_99pi temporary files
+/uImage
+/vmlinux.bin.lzma
+/99pi.its
+
