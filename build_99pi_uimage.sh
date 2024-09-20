@@ -1,8 +1,5 @@
 #!/bin/sh
 
-echo Installing modules to tar-install...
-make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu- dir-pkg
-
 echo Compressing...
 lzma -c arch/loongarch/boot/vmlinux.bin > vmlinux.bin.lzma
 

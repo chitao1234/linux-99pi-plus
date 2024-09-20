@@ -22,7 +22,6 @@
 		config-1 {
 			description = "2k0300 99pi FIT image";
 			kernel = "kernel-1";
-			loadables = "kernel-1";
 		};
 	};
 };
