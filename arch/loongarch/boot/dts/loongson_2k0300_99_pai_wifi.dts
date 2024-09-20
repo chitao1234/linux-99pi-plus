@@ -95,6 +95,13 @@
 	pinctrl-0 = <&sdio0_pin_f0>, <&sdio0_pin_f1>;
 };
 
+&sdio1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdio1_6bit>;
+	/* cd-gpio = <&gpa4 7 1>; */
+};
+
 &ehci {
 	status = "okay";
 };
@@ -234,4 +241,13 @@
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&lcd_pin_f0>,<&lcd_pin_f1>;
+};
+
+&gpa5 {
+	wlan_en-hog {
+		gpio-hog;
+		gpios = <1 GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "wlan-en-gpio";
+	};
 };
