@@ -177,3 +177,7 @@ sphinx_*/
 /vmlinux.bin.lzma
 /99pi.its
 
+# loongson binary files
+!drivers/net/can/ls_can/lscanfd_platform.elf
+!drivers/net/can/ls_can/lscanfd_dma.elf
+
